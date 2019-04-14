@@ -67,7 +67,13 @@ func main() {
 	})
 
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("website").HTTPBox()))
-	http.ListenAndServe(":8775", router)
+
+	localIP := GetOutboundIP().String()
+	port := ":8775"
+
+	fmt.Println("Server started at:", localIP+port)
+	log.Fatal(http.ListenAndServe(port, router))
+
 }
 
 //GetOutboundIP gets preferred outbound ip of this machine
