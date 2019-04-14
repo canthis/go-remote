@@ -13,7 +13,7 @@
         background-color: #10394d;
       }
 
-      footer, .footer, #canthis {
+      footer, .footer, .greyed-text, .greyed-text:hover {
         color: #ccc;
       }
       
@@ -22,7 +22,6 @@
         font-size: 2em;
         font-weight: 300;
         margin:0 auto;
-        /* letter-spacing: 0.1em; */
       }
       
       button.round-btn {

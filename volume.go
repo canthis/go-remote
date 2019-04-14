@@ -10,11 +10,52 @@ import (
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/bitly/go-simplejson"
+	"github.com/gen2brain/beeep"
+	"github.com/getlantern/systray"
+	"github.com/getlantern/systray/example/icon"
 	"github.com/gorilla/mux"
 	"github.com/itchyny/volume-go"
+	"github.com/skratchdot/open-golang/open"
 )
 
 func main() {
+
+	// Should be called at the very beginning of main().
+	systray.Run(onReady, onExit)
+	// console := w32.GetConsoleWindow()
+	// if console != 0 {
+	// 	_, consoleProcID := w32.GetWindowThreadProcessId(console)
+	// 	if w32.GetCurrentProcessId() == consoleProcID {
+	// 		w32.ShowWindowAsync(console, w32.SW_HIDE)
+	// 	}
+	// }
+
+}
+
+func onReady() {
+
+	appTitle := "Remote Control v0.2 by CanThis"
+	localIP := GetOutboundIP().String()
+	port := ":8775"
+	webAppURL := localIP + port
+
+	systray.SetIcon(icon.Data)
+	systray.SetTitle(appTitle)
+	systray.SetTooltip(appTitle)
+	systray.AddMenuItem(appTitle, appTitle).Disable()
+	mURL := systray.AddMenuItem("Launch WEB App in Browser", "Launch WEB App in Browser")
+	systray.AddSeparator()
+	mQuitOrig := systray.AddMenuItem("Quit", "Quit the whole app")
+
+	go func() {
+		<-mURL.ClickedCh
+		open.Run("http://" + webAppURL)
+	}()
+
+	go func() {
+		<-mQuitOrig.ClickedCh
+		systray.Quit()
+	}()
 
 	router := mux.NewRouter()
 
@@ -68,10 +109,11 @@ func main() {
 
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("website").HTTPBox()))
 
-	localIP := GetOutboundIP().String()
-	port := ":8775"
+	err := beeep.Notify("Remote Control by CanThis", "Server started at:"+webAppURL, "assets/information.png")
+	if err != nil {
+		panic(err)
+	}
 
-	fmt.Println("Server started at:", localIP+port)
 	log.Fatal(http.ListenAndServe(port, router))
 
 }
@@ -87,4 +129,8 @@ func GetOutboundIP() net.IP {
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 
 	return localAddr.IP
+}
+
+func onExit() {
+	return
 }

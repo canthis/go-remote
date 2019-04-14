@@ -7,7 +7,7 @@ Basic app written in golang and Vue.js to control PC master volume over LAN and 
 ## Build
 ```
 rice embed-go
-go build
+go build -ldflags -H="windowsgui -s -w" volume.go
 ```
 This should compile ```volume.exe``` file
 

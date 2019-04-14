@@ -47,17 +47,19 @@
                     step="1"
                     type="range"
                     class="volume-slider"
-                    @input="setVolume"
                 />
             </div>                                
 
             <h1 v-if="!isMuted">{{ volume }}</h1>
             <h1 v-if="isMuted">Sound is Muted</h1>
 
-            <footer class="footer">
+            <footer class="footer greyed-text">
                 <div class="content has-text-centered">
                   <p>
-                    Crafted by <strong id="canthis">CanThis</strong>
+                    Crafted with <span>❤</span> by 
+                    <strong class="greyed-text">
+                        <a class="greyed-text" href="https://github.com/canthis">CanThis</a>
+                    </strong>
                   </p>
                 </div>
             </footer>
@@ -77,7 +79,9 @@
                 },
                 watch: {
                     volume: function (newVolume, oldVolume) {
-                        this.setVolume()
+                        if(newVolume != oldVolume) {
+                            this.setVolume()
+                        }                        
                     }
                 },
                 created: function() {
@@ -99,16 +103,28 @@
                         axios.get('/api/system/volume/set/' + this.volume)
                     },
                     increaseVolume: function() {
-                        if(this.volume < 100) {
-                            this.volume = parseInt(this.volume) + 5
+                        let vol = this.volume
+
+                        if(vol < 100) {
+                            vol = vol + 5
+                            if(vol > 100) {
+                                vol = 100
+                            }
+                            this.volume = vol
                         }
                         else {
                             this.volume = 100
                         }
                     },
                     decreaseVolume: function() {
-                        if(this.volume > 0) {
-                            this.volume = parseInt(this.volume) - 5
+                        let vol = this.volume
+
+                        if(vol > 0) {
+                            vol = vol - 5
+                            if(vol < 0) {
+                                vol = 0
+                            }
+                            this.volume = vol
                         }
                         else {
                             this.volume = 0
