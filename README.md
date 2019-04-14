@@ -12,7 +12,9 @@ go build
 This should compile ```volume.exe``` file
 
 ## Running
-Launch ```volume.exe``` and navigate in browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
+- Download [executable file](https://github.com/canthis/go-remote-volume/releases/download/v0.1beta/volume.exe)
+- Launch ```volume.exe``` and navigate in browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
+
 
 ## Screenshot
 <p>
@@ -25,3 +27,4 @@ Launch ```volume.exe``` and navigate in browser to your PC's Local IP, e.g. ```l
 
 ## License
 This software is released under the MIT License, see LICENSE.
+
