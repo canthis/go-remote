@@ -12,7 +12,7 @@ go build -ldflags -H="windowsgui -s -w" volume.go
 This should compile ```volume.exe``` file
 
 ## Running
-- Download [executable file](https://github.com/canthis/go-remote-volume/releases/download/v0.1beta/volume.exe)
+- Download [executable file](https://github.com/canthis/go-remote-volume/releases/download/v0.2/volume.exe)
 - Launch ```volume.exe``` and navigate in browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
 
 
