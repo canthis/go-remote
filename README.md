@@ -1,4 +1,4 @@
-# Go Remote Volume [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/itchyny/volume-go/blob/master/LICENSE)
+# Go Remote Volume [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
 Basic app written in golang and Vue.js to control PC master volume over LAN and Shutdown (Windows only)
 
 - Golang is used for backend (expose API endpoints and change volume).
