@@ -18,7 +18,7 @@ This should compile ```volume.exe``` file
 
 ## Screenshot
 <p>
-<img src="https://dev.canthis.lv/storage/app/media/Screenshots/go-remote-volume-chrome-android.jpg" width="25%" height="25%" />
+<img src="https://dev.canthis.lv/storage/app/media/Screenshots/go-remote-volume-chrome-android-v02.png" width="25%" height="25%" />
 </p>
 
 ## Credits
