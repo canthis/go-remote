@@ -100,10 +100,10 @@
                         });
                     },
                     setVolume: function() {                        
-                        axios.get('/api/system/volume/set/' + this.volume)
+                        axios.get('/api/system/volume/set/' + parseInt(this.volume))
                     },
                     increaseVolume: function() {
-                        let vol = this.volume
+                        let vol = parseInt(this.volume)
 
                         if(vol < 100) {
                             vol = vol + 5
@@ -117,7 +117,7 @@
                         }
                     },
                     decreaseVolume: function() {
-                        let vol = this.volume
+                        let vol = parseInt(this.volume)
 
                         if(vol > 0) {
                             vol = vol - 5
