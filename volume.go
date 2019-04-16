@@ -14,8 +14,8 @@ import (
 	"github.com/gen2brain/beeep"
 	"github.com/getlantern/systray"
 	"github.com/getlantern/systray/example/icon"
-	"github.com/gorilla/mux"
 	"github.com/itchyny/volume-go"
+	"github.com/julienschmidt/httprouter"
 	"github.com/skratchdot/open-golang/open"
 )
 
@@ -25,7 +25,7 @@ func main() {
 
 func onReady() {
 
-	appTitle := "GoRemote v0.3.0 by CanThis"
+	appTitle := "GoRemote v0.3.1 by CanThis"
 	localIP := GetOutboundIP().String()
 	port := ":8775"
 	webAppURL := localIP + port
@@ -48,53 +48,13 @@ func onReady() {
 		systray.Quit()
 	}()
 
-	router := mux.NewRouter()
-
-	router.HandleFunc("/api/system/volume/get", func(w http.ResponseWriter, router *http.Request) {
-
-		vol, err := volume.GetVolume()
-		if err != nil {
-			log.Fatalf("get volume failed: %+v", err)
-		}
-
-		json := simplejson.New()
-		json.Set("volume", vol)
-
-		payload, err := json.MarshalJSON()
-		if err != nil {
-			log.Println(err)
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(payload)
-
-	})
-
-	router.HandleFunc("/api/system/volume/set/{value}", func(w http.ResponseWriter, router *http.Request) {
-		vars := mux.Vars(router)
-		value := vars["value"]
-
-		volumeToSet64, _ := strconv.ParseInt(value, 10, 16)
-		volumeToSet := int(volumeToSet64)
-
-		volume.SetVolume(volumeToSet)
-	})
-
-	router.HandleFunc("/api/system/volume/mute", func(w http.ResponseWriter, router *http.Request) {
-		volume.Mute()
-	})
-
-	router.HandleFunc("/api/system/volume/unmute", func(w http.ResponseWriter, router *http.Request) {
-		volume.Unmute()
-	})
-
-	router.HandleFunc("/api/system/shutdown", func(w http.ResponseWriter, router *http.Request) {
-		if err := exec.Command("cmd", "/C", "shutdown", "/s").Run(); err != nil {
-			fmt.Println("Failed to initiate shutdown:", err)
-		}
-	})
-
-	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("website").HTTPBox()))
+	router := httprouter.New()
+	router.GET("/api/system/volume/get", getVolumeHandler)
+	router.GET("/api/system/volume/set/:volume", setVolumeHandler)
+	router.GET("/api/system/volume/mute", muteHandler)
+	router.GET("/api/system/volume/unmute", unmuteHandler)
+	router.GET("/api/system/shutdown", shutdownHandler)
+	router.NotFound = http.FileServer(rice.MustFindBox("website").HTTPBox())
 
 	err := beeep.Notify("Remote Control by CanThis", "Server started at:"+webAppURL, "assets/information.png")
 	if err != nil {
@@ -103,6 +63,47 @@ func onReady() {
 
 	log.Fatal(http.ListenAndServe(port, router))
 
+}
+
+func getVolumeHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	vol, err := volume.GetVolume()
+	if err != nil {
+		log.Fatalf("get volume failed: %+v", err)
+	}
+
+	json := simplejson.New()
+	json.Set("volume", vol)
+
+	payload, err := json.MarshalJSON()
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(payload)
+}
+
+func setVolumeHandler(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	value := ps.ByName("volume")
+
+	volumeToSet64, _ := strconv.ParseInt(value, 10, 16)
+	volumeToSet := int(volumeToSet64)
+
+	volume.SetVolume(volumeToSet)
+}
+
+func muteHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	volume.Mute()
+}
+
+func unmuteHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	volume.Unmute()
+}
+
+func shutdownHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	if err := exec.Command("cmd", "/C", "shutdown", "/s").Run(); err != nil {
+		fmt.Println("Failed to initiate shutdown:", err)
+	}
 }
 
 //GetOutboundIP gets preferred outbound ip of this machine
