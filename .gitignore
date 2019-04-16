@@ -4,6 +4,8 @@
 *.dll
 *.so
 *.dylib
+*.syso\
+rice-box.go
 
 # Test binary, built with `go test -c`
 *.test

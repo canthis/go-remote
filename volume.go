@@ -1,3 +1,4 @@
+//go:generate goversioninfo
 package main
 
 import (
@@ -24,7 +25,7 @@ func main() {
 
 func onReady() {
 
-	appTitle := "Remote Control v0.2 by CanThis"
+	appTitle := "GoRemote v0.3.0 by CanThis"
 	localIP := GetOutboundIP().String()
 	port := ":8775"
 	webAppURL := localIP + port
@@ -55,7 +56,6 @@ func onReady() {
 		if err != nil {
 			log.Fatalf("get volume failed: %+v", err)
 		}
-		fmt.Printf("current volume: %d\n", vol)
 
 		json := simplejson.New()
 		json.Set("volume", vol)
@@ -78,17 +78,14 @@ func onReady() {
 		volumeToSet := int(volumeToSet64)
 
 		volume.SetVolume(volumeToSet)
-		fmt.Printf("current volume: %d\n", volumeToSet)
 	})
 
 	router.HandleFunc("/api/system/volume/mute", func(w http.ResponseWriter, router *http.Request) {
 		volume.Mute()
-		fmt.Printf("volume muted\n")
 	})
 
 	router.HandleFunc("/api/system/volume/unmute", func(w http.ResponseWriter, router *http.Request) {
 		volume.Unmute()
-		fmt.Printf("volume unmuted\n")
 	})
 
 	router.HandleFunc("/api/system/shutdown", func(w http.ResponseWriter, router *http.Request) {
