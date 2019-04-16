@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>GoRemote v0.3.0 by CanThis</title>
+        <title>GoRemote v0.3.1 by CanThis</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -74,6 +74,7 @@
         </div>
         <script src="vue.js"></script>
         <script src="buefy.dialog.js"></script>
+        <script src="buefy.toast.js"></script>
         <script src="axios.min.js"></script>
 
         <script>
@@ -150,8 +151,8 @@
                             title: 'Shut Down PC',
                             message: 'Are You sure You want to shut down Your PC?',
                             onConfirm: function() {
-                                this.$toast.open('Your system will shutdown shortly')
                                 axios.get('/api/system/shutdown')
+                                this.$toast.open('Your system will shutdown shortly')
                             }
                         })
                     },
