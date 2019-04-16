@@ -3,6 +3,7 @@
 *.exe~
 *.dll
 *.so
+*.syso
 *.dylib
 *.syso\
 rice-box.go
