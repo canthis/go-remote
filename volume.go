@@ -25,7 +25,7 @@ func main() {
 
 func onReady() {
 
-	appTitle := "GoRemote v0.3.1 by CanThis"
+	appTitle := "GoRemote v0.3.2 by CanThis"
 	localIP := GetOutboundIP().String()
 	port := ":8775"
 	webAppURL := localIP + port
@@ -34,18 +34,21 @@ func onReady() {
 	systray.SetTitle(appTitle)
 	systray.SetTooltip(appTitle)
 	systray.AddMenuItem(appTitle, appTitle).Disable()
-	mURL := systray.AddMenuItem("Launch WEB App in Browser", "Launch WEB App in Browser")
+	systray.AddSeparator()
+	mURL := systray.AddMenuItem("Web App address: "+webAppURL, "Open WEB App in Browser")
 	systray.AddSeparator()
 	mQuitOrig := systray.AddMenuItem("Quit", "Quit the whole app")
 
 	go func() {
-		<-mURL.ClickedCh
-		open.Run("http://" + webAppURL)
-	}()
-
-	go func() {
-		<-mQuitOrig.ClickedCh
-		systray.Quit()
+		for {
+			select {
+			case <-mURL.ClickedCh:
+				open.Run("http://" + webAppURL)
+			case <-mQuitOrig.ClickedCh:
+				systray.Quit()
+				return
+			}
+		}
 	}()
 
 	router := httprouter.New()
@@ -56,7 +59,7 @@ func onReady() {
 	router.GET("/api/system/shutdown", shutdownHandler)
 	router.NotFound = http.FileServer(rice.MustFindBox("website").HTTPBox())
 
-	err := beeep.Notify("Remote Control by CanThis", "Server started at:"+webAppURL, "assets/information.png")
+	err := beeep.Notify(appTitle, "Server started at:"+webAppURL, "website/favicon-32x32.png")
 	if err != nil {
 		panic(err)
 	}

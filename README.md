@@ -1,5 +1,8 @@
-# Go Remote Volume [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
-Basic app written in golang and Vue.js to control PC master volume over LAN and Shutdown (Windows only)
+# Go Remote Volume 
+![GitHub release](https://img.shields.io/github/release/canthis/go-remote.svg?label=version)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
+
+Basic app written in golang and Vue.js to control PC master volume over LAN and Shutdown (Currently Windows only)
 
 - Golang is used for backend (expose API endpoints and change volume).
 - Vue.js is used to provide WEB interface and interact with backend API.
@@ -14,8 +17,8 @@ rice append /exec "GoRemote.exe"
 This should compile ```GoRemote.exe``` file
 
 ## Running
-- Download [executable file](https://github.com/canthis/go-remote/releases/download/v0.3.1/GoRemote.exe)
-- Launch ```GoRemote.exe``` and navigate in browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
+- Download: [Latest releasae executable file](https://github.com/canthis/go-remote/releases/latest/download/GoRemote.exe)
+- Launch ```GoRemote.exe``` and navigate from you mobile browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
 
 
 ## Screenshot
