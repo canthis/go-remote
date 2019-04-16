@@ -14,7 +14,7 @@ rice append /exec "GoRemote.exe"
 This should compile ```GoRemote.exe``` file
 
 ## Running
-- Download [executable file](https://github.com/canthis/go-remote-volume/releases/download/v0.3.0/GoRemote.exe)
+- Download [executable file](https://github.com/canthis/go-remote/releases/download/v0.3.1/GoRemote.exe)
 - Launch ```GoRemote.exe``` and navigate in browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
 
 
@@ -29,7 +29,7 @@ This should compile ```GoRemote.exe``` file
 - https://github.com/josephspurrier/goversioninfo
 - https://github.com/gen2brain/beeep
 - https://github.com/getlantern/systray
-- https://github.com/gorilla/mux
+- https://github.com/julienschmidt/httprouter
 - https://codepen.io/calebbrewer/pen/pdyNbb
 
 ## License
