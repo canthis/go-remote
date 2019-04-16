@@ -17,7 +17,7 @@ rice append /exec "GoRemote.exe"
 This should compile ```GoRemote.exe``` file
 
 ## Running
-- Download: [Latest releasae executable file](https://github.com/canthis/go-remote/releases/latest/download/GoRemote.exe)
+- Download: [Latest release executable file](https://github.com/canthis/go-remote/releases/latest/download/GoRemote.exe)
 - Launch ```GoRemote.exe``` and navigate from you mobile browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
 
 
