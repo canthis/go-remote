@@ -1,12 +1,9 @@
-//go:generate goversioninfo
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 	"net/http"
-	"os/exec"
 	"strconv"
 	"volume/icon"
 
@@ -56,7 +53,7 @@ func onReady() {
 	router.GET("/api/system/volume/set/:volume", setVolumeHandler)
 	router.GET("/api/system/volume/mute", muteHandler)
 	router.GET("/api/system/volume/unmute", unmuteHandler)
-	router.GET("/api/system/shutdown", shutdownHandler)
+	router.POST("/api/system/shutdown", shutdownHandler)
 	router.NotFound = http.FileServer(rice.MustFindBox("website").HTTPBox())
 
 	err := beeep.Notify(appTitle, "Server started at:"+webAppURL, "website/favicon-32x32.png")
@@ -101,12 +98,6 @@ func muteHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func unmuteHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	volume.Unmute()
-}
-
-func shutdownHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	if err := exec.Command("cmd", "/C", "shutdown", "/s").Run(); err != nil {
-		fmt.Println("Failed to initiate shutdown:", err)
-	}
 }
 
 //GetOutboundIP gets preferred outbound ip of this machine

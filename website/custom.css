@@ -33,7 +33,7 @@
       
       button.round-btn {
         display: block;
-        border-radius: 100%;
+        border-radius: 25%;
         border: none;
         outline: none;
         padding: 20px; 
