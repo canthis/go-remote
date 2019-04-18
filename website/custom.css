@@ -17,7 +17,7 @@
 
       .footer {
         background: transparent!important;
-        padding: 4rem 1.5rem 0rem !important;
+        padding: 3rem 1.5rem 0rem !important;
       }
 
       footer, .footer, .greyed-text, .greyed-text:hover {
@@ -36,8 +36,10 @@
         border-radius: 100%;
         border: none;
         outline: none;
-        padding: 20px;        
-        box-shadow: 3px 3px 7px #333;
+        padding: 20px; 
+        -webkit-box-shadow: -5px 3px 20px -12px rgba(0,0,0,0.75);
+        -moz-box-shadow: -5px 3px 20px -12px rgba(0,0,0,0.75);
+        box-shadow: -5px 3px 20px -12px rgba(0,0,0,0.75);             
       }
 
       button.left-side {
@@ -46,9 +48,12 @@
 
       button.right-side {
         margin:28px 0px 28px 32px;
+        border-bottom: 3px solid #005175;
       }
 
-      button:active {
+      .round-btn:active {
+        transform: translateY(1px);
+        border-bottom-width: 2px;
         box-shadow: none;
       }
       
@@ -77,10 +82,12 @@
       
       .power {
         background-color: #ff1538;
+        border-bottom: 3px solid #b11129 !important;      
       }
       
       .source {
         background-color: #ff8f01;
+        border-bottom: 3px solid #ad6100 !important;
       }
 
       .volume-slider {

@@ -8,12 +8,12 @@ import (
 	"net/http"
 	"os/exec"
 	"strconv"
+	"volume/icon"
 
 	rice "github.com/GeertJohan/go.rice"
 	"github.com/bitly/go-simplejson"
 	"github.com/gen2brain/beeep"
 	"github.com/getlantern/systray"
-	"github.com/getlantern/systray/example/icon"
 	"github.com/itchyny/volume-go"
 	"github.com/julienschmidt/httprouter"
 	"github.com/skratchdot/open-golang/open"
@@ -25,7 +25,7 @@ func main() {
 
 func onReady() {
 
-	appTitle := "GoRemote v0.3.2 by CanThis"
+	appTitle := "GoRemote v0.3.3 by CanThis"
 	localIP := GetOutboundIP().String()
 	port := ":8775"
 	webAppURL := localIP + port
