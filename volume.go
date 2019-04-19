@@ -22,7 +22,7 @@ func main() {
 
 func onReady() {
 
-	appTitle := "GoRemote v0.3.3 by CanThis"
+	appTitle := "GoRemote v0.3.4 by CanThis"
 	localIP := GetOutboundIP().String()
 	port := ":8775"
 	webAppURL := localIP + port
