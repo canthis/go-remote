@@ -3,13 +3,13 @@
         "FileVersion": {
             "Major": 0,
             "Minor": 3,
-            "Patch": 4,
+            "Patch": 5,
             "Build": 0
         },
         "ProductVersion": {
             "Major": 0,
             "Minor": 3,
-            "Patch": 4,
+            "Patch": 5,
             "Build": 0
         },
         "FileFlagsMask": "3f",
@@ -22,14 +22,14 @@
         "Comments": "",
         "CompanyName": "CanThis",
         "FileDescription": "GoRemote Application",
-        "FileVersion": "0.3.4",
+        "FileVersion": "0.3.5",
         "InternalName": "",
         "LegalCopyright": "CanThis",
         "LegalTrademarks": "",
         "OriginalFilename": "GoRemote.exe",
         "PrivateBuild": "",
         "ProductName": "GoRemote",
-        "ProductVersion": "v0.3.4",
+        "ProductVersion": "v0.3.5",
         "SpecialBuild": ""
     },
     "VarFileInfo": {
