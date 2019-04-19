@@ -30,11 +30,11 @@
                 </section>
 
                 <section class="vol-section">
-                    <button class="round-btn right-side" @click="increaseVolume">
+                    <button class="round-btn right-side" @click="increaseVolume(5)" v-longclick="() => increaseVolume(1)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </button>
 
-                    <button class="round-btn right-side" @click="decreaseVolume">
+                    <button class="round-btn right-side" @click="decreaseVolume(5)" v-longclick="() => decreaseVolume(1)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </button>
                 </section>
@@ -50,7 +50,6 @@
                 />
             </div>                                
 
-            <!-- <h1 v-if="!isMuted">{{ volume }}</h1> -->
             <input
                 v-if="!isMuted"
                 class="transparent-input" 
@@ -102,12 +101,17 @@
                     </p>
                 </div>
             </footer>
+
         </div>
         <script src="vue.js"></script>
         <script src="buefy.min.js"></script>
         <script src="axios.min.js"></script>
+        <script src="vue-long-click.min.js"></script>
 
         <script>
+            const longClickInstance = window['vue-long-click'].longClickDirective({delay: 400, interval: 50})
+            Vue.directive('longclick', longClickInstance)
+
             new Vue({
                 el: '#app',
                 data () {
@@ -161,11 +165,11 @@
                     setVolume: function() {                        
                         axios.get('/api/system/volume/set/' + parseInt(this.volume))                                       
                     },
-                    increaseVolume: function() {
+                    increaseVolume: function(amount) {
                         let vol = parseInt(this.volume)
 
                         if(vol < 100) {
-                            vol = vol + 5
+                            vol = vol + amount
                             if(vol > 100) {
                                 vol = 100
                             }
@@ -175,11 +179,11 @@
                             this.volume = 100
                         }
                     },
-                    decreaseVolume: function() {
+                    decreaseVolume: function(amount) {
                         let vol = parseInt(this.volume)
 
                         if(vol > 0) {
-                            vol = vol - 5
+                            vol = vol - amount
                             if(vol < 0) {
                                 vol = 0
                             }
@@ -248,7 +252,7 @@
                         })
                     },
                 },
-            })
+            })            
 
             // Restricts input for the given textbox to the given inputFilter.
             function setInputFilter(textbox, inputFilter) {
