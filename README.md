@@ -2,10 +2,10 @@
 ![GitHub release](https://img.shields.io/github/release/canthis/go-remote.svg?label=version)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
 
-Basic app written in golang and Vue.js to Shutdown PC and control master volume over LAN/WiFi (Currently Windows only)
+Basic app written in golang and Vue.js to control master volume, shutdown and restart PC over LAN/WiFi (Tested on Windows 10 v1809 and Linux Mint 19.1 Tessa)
 
-- Golang is used for backend (expose API endpoints and change volume).
-- Vue.js is used to provide WEB interface and interact with backend API.
+- **Go** is used for backend (run http server, expose API endpoints and change volume).
+- **Vue.js/buefy/axios** is used for UI and interaction with backend API.
 
 ## Build
 ```
@@ -16,15 +16,17 @@ rice append /exec "GoRemote.exe"
 This should compile ```GoRemote.exe``` file
 
 ## Running
-- Download: [GoRemote-amd64.exe (64-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-amd64.exe) 
+- Download Windows binaries: [GoRemote-amd64.exe (64-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-amd64.exe) 
 or [GoRemote-i386.exe (32-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-i386.exe)
+- Download Linux binaries: [GoRemote-linux-amd64 (64-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-linux-amd64) 
+or [GoRemote-linux-i386 (32-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-linux-i386)
 - Launch it and navigate from you mobile browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
-- Add it Home Screen and enjoy
+- Add it to Home Screen and enjoy
 
 
 ## Screenshot
 <p>
-<img src="https://dev.canthis.lv/storage/app/media/Screenshots/go-remote-volume-chrome-android-v0330.png" width="25%" height="25%" />
+<img src="https://dev.canthis.lv/storage/app/media/Screenshots/go-remote-volume-chrome-android-v0340.png" width="25%" height="25%" />
 </p>
 
 ## Credits

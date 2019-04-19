@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-        <title>GoRemote v0.3.3 by CanThis</title>
+        <title>GoRemote v0.3.4 by CanThis</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -24,24 +24,24 @@
                         <svg v-if="isMuted" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7 9v6h4l5 5V4l-5 5H7z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </button>
 
-                    <button class="round-btn power left-side" @click="confirm">
+                    <button class="round-btn power left-side" @click="isShutdownModalActive = true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42C17.99 7.86 19 9.81 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7c0-2.19 1.01-4.14 2.58-5.42L6.17 5.17C4.23 6.82 3 9.26 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9c0-2.74-1.23-5.18-3.17-6.83z"/></svg>            
                     </button>
                 </section>
 
                 <section class="vol-section">
-                    <button class="round-btn right-side" @click="increaseVolume">
+                    <button class="round-btn right-side" @click="increaseVolume(5)" v-longclick="() => increaseVolume(1)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </button>
 
-                    <button class="round-btn right-side" @click="decreaseVolume">
+                    <button class="round-btn right-side" @click="decreaseVolume(5)" v-longclick="() => decreaseVolume(1)">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
                     </button>
                 </section>
 
                 <input
+                    id="volume-control"
                     v-model="volume"
-                    orient="vertical"
                     min="0"
                     max="100"
                     step="1"
@@ -50,10 +50,40 @@
                 />
             </div>                                
 
-            <h1 v-if="!isMuted">{{ volume }}</h1>
+            <input
+                v-if="!isMuted"
+                class="transparent-input" 
+                id="intLimitTextBox" 
+                type="text" 
+                :value="volume" 
+                @input="() => {}" 
+                @change="changeOnOnter" 
+                v-on:keyup.enter="changeOnOnter" />
             <h1 v-if="isMuted">Sound is Muted</h1>
 
-          </p>
+            <b-modal :active.sync="isShutdownModalActive" has-modal-card>
+                <div class="modal-card animation-content">
+                    <header class="modal-card-head">
+                        <p class="modal-card-title">Shut Down or Restart PC</p>
+                    </header>
+                    <section class="modal-card-body">
+                        <div class="media">
+                            <div class="media-content">                                
+                                <b-field label="Please select either you want to shutdown or restart a PC">
+                                    <b-select placeholder="Select an action" expanded size="is-medium" v-model="action">                                        
+                                        <option v-for="option in actions" :value="option.value">{{ option.name }}</option>
+                                    </b-select>
+                                </b-field>
+                            </div>
+                        </div>
+                    </section>
+                     
+                    <footer class="modal-card-foot">
+                        <b-button @click="isShutdownModalActive = false" size="is-medium">Cancel</b-button>
+                        <b-button class="is-primary" @click="confirm" size="is-medium">OK</b-button>
+                    </footer>
+                </div>
+            </b-modal>
 
             <footer class="footer greyed-text">
                 <div class="content has-text-centered">
@@ -71,19 +101,42 @@
                     </p>
                 </div>
             </footer>
+
         </div>
         <script src="vue.js"></script>
-        <script src="buefy.dialog.js"></script>
-        <script src="buefy.toast.js"></script>
+        <script src="buefy.min.js"></script>
         <script src="axios.min.js"></script>
+        <script src="vue-long-click.min.js"></script>
 
         <script>
+            const longClickInstance = window['vue-long-click'].longClickDirective({delay: 400, interval: 50})
+            Vue.directive('longclick', longClickInstance)
+
             new Vue({
                 el: '#app',
                 data () {
                     return {
                         volume: 0,
                         isMuted: false,
+                        isShutdownModalActive: false,
+                        timeout: 0,
+                        action: null,
+                        actions: [
+                            {
+                                "value": "shutdown",
+                                "name" : "Shutdown",
+                                "dialogTitle": "Shutdown PC",
+                                "confirmation" : "Are you sure you want to shutdown your PC?",
+                                "successMessage" : "Your PC will shutdown shortly"
+                            },
+                            {
+                                "value": "restart",
+                                "name" : "Restart",
+                                "dialogTitle": "Restart PC",
+                                "confirmation" : "Are you sure you want to restart your PC?",
+                                "successMessage" : "Your PC will restart shortly"
+                            }
+                        ]
                     }
                 },
                 watch: {
@@ -95,6 +148,10 @@
                     this.getVolume()                    
                 },
                 methods: {
+                    changeOnOnter: function(e) {
+                        let manualVolume = parseInt(e.target.value)
+                        this.volume = manualVolume
+                    },
                     getVolume: function() {
                         const vm = this;
                         axios.get('/api/system/volume/get')
@@ -108,11 +165,11 @@
                     setVolume: function() {                        
                         axios.get('/api/system/volume/set/' + parseInt(this.volume))                                       
                     },
-                    increaseVolume: function() {
+                    increaseVolume: function(amount) {
                         let vol = parseInt(this.volume)
 
                         if(vol < 100) {
-                            vol = vol + 5
+                            vol = vol + amount
                             if(vol > 100) {
                                 vol = 100
                             }
@@ -122,11 +179,11 @@
                             this.volume = 100
                         }
                     },
-                    decreaseVolume: function() {
+                    decreaseVolume: function(amount) {
                         let vol = parseInt(this.volume)
 
                         if(vol > 0) {
-                            vol = vol - 5
+                            vol = vol - amount
                             if(vol < 0) {
                                 vol = 0
                             }
@@ -147,17 +204,75 @@
                         }
                     },
                     confirm: function() {
+
+                        if(this.action == null) {
+                            this.$toast.open({
+                                duration: 3000,
+                                message: 'You should select action to perform first!',
+                                position: 'is-bottom',
+                                type: 'is-info'
+                            })
+                            return
+                        }
+
+                        let dialogData = {}
+
+                        for (let i=0; i<this.actions.length; i++) {
+                            if(this.actions[i].value == this.action) {
+                                dialogData = this.actions[i]
+                                break
+                            }                        
+                        }
+
+                        let self = this
+
                         this.$dialog.confirm({
-                            title: 'Shut Down PC',
-                            message: 'Are You sure You want to shut down Your PC?',
+                            title: dialogData.dialogTitle,
+                            message: dialogData.confirmation,
                             onConfirm: function() {
-                                axios.get('/api/system/shutdown')
-                                this.$toast.open('Your system will shutdown shortly')
+                                self.isShutdownModalActive = false
+                                
+                                axios.post('/api/system/shutdown', {
+                                    action: self.action
+                                })
+                                .then(function (response) {
+                                    console.log(response);
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                })
+
+                                this.$toast.open({
+                                    duration: 3000,
+                                    message: dialogData.successMessage,
+                                    position: 'is-bottom',
+                                    type: 'is-success'
+                                })
                             }
                         })
                     },
                 },
-            })
+            })            
+
+            // Restricts input for the given textbox to the given inputFilter.
+            function setInputFilter(textbox, inputFilter) {
+                ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                    textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    }
+                    });
+                });
+            }
+
+            setInputFilter(document.getElementById("intLimitTextBox"), function(value) {
+                return /^\d*$/.test(value) && (value === "" || parseInt(value) <= 100); 
+            });
         </script>    
     </body>
 </html>

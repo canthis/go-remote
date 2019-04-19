@@ -5,8 +5,9 @@
 *.so
 *.syso
 *.dylib
-*.syso\
 rice-box.go
+GoRemote-linux-amd64
+GoRemote-linux-i386
 
 # Test binary, built with `go test -c`
 *.test
