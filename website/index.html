@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-        <title>GoRemote v0.3.4 by CanThis</title>
+        <title>GoRemote v0.3.5 by CanThis</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -40,13 +40,13 @@
                 </section>
 
                 <input
-                    id="volume-control"
+                    class="volume-slider"
                     v-model="volume"
+                    @input="isFetchingDone = true"
                     min="0"
                     max="100"
                     step="1"
                     type="range"
-                    class="volume-slider"
                 />
             </div>                                
 
@@ -109,7 +109,7 @@
         <script src="vue-long-click.min.js"></script>
 
         <script>
-            const longClickInstance = window['vue-long-click'].longClickDirective({delay: 400, interval: 50})
+            const longClickInstance = window['vue-long-click'].longClickDirective({delay: 300, interval: 50})
             Vue.directive('longclick', longClickInstance)
 
             new Vue({
@@ -119,6 +119,7 @@
                         volume: 0,
                         isMuted: false,
                         isShutdownModalActive: false,
+                        isFetchingDone: false,
                         timeout: 0,
                         action: null,
                         actions: [
@@ -141,31 +142,36 @@
                 },
                 watch: {
                     volume: function () {
-                        this.setVolume()                     
+                        if(this.isFetchingDone) {
+                            this.setVolume()
+                        }                                           
                     },
                 },
                 created: function() {
-                    this.getVolume()                    
+                    this.getVolume()                                                      
                 },
                 methods: {
                     changeOnOnter: function(e) {
+                        this.isFetchingDone = true
                         let manualVolume = parseInt(e.target.value)
+                        manualVolume = ! isNaN(manualVolume) ? manualVolume : 0
                         this.volume = manualVolume
                     },
                     getVolume: function() {
                         const vm = this;
                         axios.get('/api/system/volume/get')
                         .then(function (response) {
-                            vm.volume = parseInt(response.data.volume)
+                            vm.volume = parseInt(response.data.volume)                            
                         })
                         .catch(function (error) {
                             console.log(error)
                         });
                     },
                     setVolume: function() {                        
-                        axios.get('/api/system/volume/set/' + parseInt(this.volume))                                       
+                        axios.get('/api/system/volume/set/' + parseInt(this.volume))                                                   
                     },
                     increaseVolume: function(amount) {
+                        this.isFetchingDone = true
                         let vol = parseInt(this.volume)
 
                         if(vol < 100) {
@@ -180,6 +186,7 @@
                         }
                     },
                     decreaseVolume: function(amount) {
+                        this.isFetchingDone = true
                         let vol = parseInt(this.volume)
 
                         if(vol > 0) {
