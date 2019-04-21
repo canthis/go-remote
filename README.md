@@ -2,7 +2,7 @@
 ![GitHub release](https://img.shields.io/github/release/canthis/go-remote.svg?label=version)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
 
-Basic app written in golang and Vue.js to control master volume, shutdown and restart PC over LAN/WiFi (Tested on Windows 10 v1809 and Linux Mint 19.1 Tessa)
+Basic app written in Go and Vue.js to control master volume, shutdown and restart PC over LAN/WiFi (Tested on Windows 10 v1809 and Linux Mint 19.1 Tessa)
 
 - **Go** is used for backend (run http server, expose API endpoints and change volume).
 - **Vue.js/buefy/axios** is used for UI and interaction with backend API.
@@ -10,8 +10,8 @@ Basic app written in golang and Vue.js to control master volume, shutdown and re
 ## Build
 ```
 go generate
-go build -ldflags -H="windowsgui -s -w" -o "GoRemote.exe"
-rice append /exec "GoRemote.exe"
+build -ldflags="-H windowsgui -s -w" -o "GoRemote.exe"
+rice append --exec "GoRemote.exe"
 ```
 This should compile ```GoRemote.exe``` file
 
@@ -20,9 +20,8 @@ This should compile ```GoRemote.exe``` file
 or [GoRemote-i386.exe (32-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-i386.exe)
 - Download Linux binaries: [GoRemote-linux-amd64 (64-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-linux-amd64) 
 or [GoRemote-linux-i386 (32-bit)](https://github.com/canthis/go-remote/releases/latest/download/GoRemote-linux-i386)
-- Launch it and navigate from you mobile browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
+- Launch it and navigate from your mobile browser to your PC's Local IP, e.g. ```localhost:8775``` or ```192.168.x.x:8775```
 - Add it to Home Screen and enjoy
-
 
 ## Screenshot
 <p>

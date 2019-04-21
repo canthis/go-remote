@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-        <title>GoRemote v0.3.5 by CanThis</title>
+        <title>GoRemote by CanThis</title>
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/favicon.ico" type="image/x-icon">
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -58,7 +58,9 @@
                 :value="volume" 
                 @input="() => {}" 
                 @change="changeOnOnter" 
-                v-on:keyup.enter="changeOnOnter" />
+                v-on:keyup.enter="changeOnOnter"
+                autocomplete="off"
+            />
             <h1 v-if="isMuted">Sound is Muted</h1>
 
             <b-modal :active.sync="isShutdownModalActive" has-modal-card>
@@ -87,18 +89,23 @@
 
             <footer class="footer greyed-text">
                 <div class="content has-text-centered">
-                    <p>
-                    Crafted with <span>❤</span> by 
-                    <strong class="greyed-text">
-                        <a class="greyed-text" href="https://github.com/canthis">CanThis</a>
-                    </strong>
+                    <p style="margin-bottom:5px;">
+                        Crafted with <span>❤</span> by 
+                        <strong class="greyed-text">
+                            <a class="greyed-text" href="https://github.com/canthis">CanThis</a>
+                        </strong>
                     </p>
+
                     <p style="font-size: 10px;" class="greyed-text">App Icon made by 
                         <a class="greyed-text" href="https://www.flaticon.com/authors/smashicons" title="Smashicons">Smashicons</a> from 
                         <a class="greyed-text" href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> 
                         is licensed by 
                         <a class="greyed-text" href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
                     </p>
+
+                    <a href="https://github.com/canthis/go-remote" title="GitHub" target="_blank">
+                        <img src="GitHub-Mark-Light-32px.png" alt="GitHub" width="24">
+                    </a>
                 </div>
             </footer>
 
@@ -158,17 +165,21 @@
                         this.volume = manualVolume
                     },
                     getVolume: function() {
-                        const vm = this;
+                        const self = this;
                         axios.get('/api/system/volume/get')
                         .then(function (response) {
-                            vm.volume = parseInt(response.data.volume)
+                            self.volume = parseInt(response.data.volume)
                         })
                         .catch(function (error) {
-                            console.log(error)
+                            self.handleError(error)
                         });
                     },
                     setVolume: function() {
+                        const self = this;
                         axios.get('/api/system/volume/set/' + parseInt(this.volume))
+                        .catch(function (error) {
+                            self.handleError(error)
+                        });
                     },
                     increaseVolume: function(amount) {
                         this.isFetchingDone = true
@@ -205,17 +216,22 @@
 
                         if(this.isMuted) {
                             axios.get('/api/system/volume/mute')
+                            .catch(function (error) {
+                                self.handleError(error)
+                            });
                         }
                         else {
                             axios.get('/api/system/volume/unmute')
+                            .catch(function (error) {
+                                self.handleError(error)
+                            });
                         }
                     },
                     confirm: function() {
-
                         if(this.action == null) {
                             this.$toast.open({
                                 duration: 3000,
-                                message: 'You should select action to perform first!',
+                                message: 'You should select an action to perform!',
                                 position: 'is-bottom',
                                 type: 'is-info'
                             })
@@ -242,12 +258,9 @@
                                 axios.post('/api/system/shutdown', {
                                     action: self.action
                                 })
-                                .then(function (response) {
-                                    console.log(response);
-                                })
                                 .catch(function (error) {
-                                    console.log(error);
-                                })
+                                    self.handleError(error)
+                                });
 
                                 this.$toast.open({
                                     duration: 3000,
@@ -258,8 +271,21 @@
                             }
                         })
                     },
+                    handleError: function(error) {
+                        let isNetworkError = error.message.indexOf("Network Error") !== -1
+                        let errorMessage = isNetworkError 
+                            ? 'Request failed due to Netwotk Error! Check your connection!' 
+                            : 'Unknown Error occured! Please try again!'
+                        
+                        this.$toast.open({
+                            duration: 2000,
+                            message: errorMessage,
+                            position: 'is-bottom',
+                            type: 'is-warning',
+                        })
+                    },
                 },
-            })            
+            })
 
             // Restricts input for the given textbox to the given inputFilter.
             function setInputFilter(textbox, inputFilter) {
