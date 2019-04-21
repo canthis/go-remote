@@ -2,7 +2,7 @@
 ![GitHub release](https://img.shields.io/github/release/canthis/go-remote.svg?label=version)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/canthis/go-remote-volume/blob/master/LICENSE)
 
-Basic app written in golang and Vue.js to control master volume, shutdown and restart PC over LAN/WiFi (Tested on Windows 10 v1809 and Linux Mint 19.1 Tessa)
+Basic app written in Go and Vue.js to control master volume, shutdown and restart PC over LAN/WiFi (Tested on Windows 10 v1809 and Linux Mint 19.1 Tessa)
 
 - **Go** is used for backend (run http server, expose API endpoints and change volume).
 - **Vue.js/buefy/axios** is used for UI and interaction with backend API.
