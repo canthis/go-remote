@@ -212,18 +212,21 @@
                         }
                     },
                     toggleMute: function() {
+                        let self = this
                         this.isMuted = !this.isMuted
 
                         if(this.isMuted) {
                             axios.get('/api/system/volume/mute')
                             .catch(function (error) {
                                 self.handleError(error)
+                                self.isMuted = !self.isMuted
                             });
                         }
                         else {
                             axios.get('/api/system/volume/unmute')
                             .catch(function (error) {
                                 self.handleError(error)
+                                self.isMuted = !self.isMuted
                             });
                         }
                     },
@@ -258,16 +261,17 @@
                                 axios.post('/api/system/shutdown', {
                                     action: self.action
                                 })
+                                .then(function(){
+                                    this.$toast.open({
+                                        duration: 3000,
+                                        message: dialogData.successMessage,
+                                        position: 'is-bottom',
+                                        type: 'is-success'
+                                    })
+                                })
                                 .catch(function (error) {
                                     self.handleError(error)
                                 });
-
-                                this.$toast.open({
-                                    duration: 3000,
-                                    message: dialogData.successMessage,
-                                    position: 'is-bottom',
-                                    type: 'is-success'
-                                })
                             }
                         })
                     },
